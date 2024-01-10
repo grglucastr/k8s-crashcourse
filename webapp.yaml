@@ -41,9 +41,11 @@ kind: Service
 metadata:
   name: webapp-service
 spec:
+  type: NodePort # external service type
   selector:
     app: webapp # this is how service and pod (above) find each other. Service foward the request to its related pods. This should match the label selector of the pod
   ports:
     - protocol: TCP
       port: 3000 # its a common practice to keep the same port, but it can be 8080 or any other.
       targetPort: 3000 # the port of the pod. The service should foward the request to
+      nodePort: 30100 #open the port in kubernetes where the app will be availble
