@@ -1,21 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-deployment
+  name: mongo-deployment
   labels:
-    app: nginx
+    app: mongo
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: mongo
   template:
     metadata:
       labels:
-        app: nginx
+        app: mongo
     spec:
       containers:
-      - name: nginx
-        image: nginx:1.14.2
+      - name: mongodb
+        image: mongo:5.0
         ports:
-        - containerPort: 80
+        - containerPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service
+spec:
+  selector:
+    app: mongo # this is how service and pod (above) find each other. Service foward the request to its related pods. This should match the label selector of the pod
+  ports:
+    - protocol: TCP
+      port: 27017 # its a common practice to keep the same port, but it can be 8080 or any other.
+      targetPort: 27017 # the port of the pod. The service should foward the request to
