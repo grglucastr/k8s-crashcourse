@@ -19,6 +19,22 @@ spec:
         image: nanajanashia/k8s-demo-app:v1.0
         ports:
         - containerPort: 3000 # where the application starts inside the containers
+        env:
+        - name: USER_NAME # this is the variable name defined inside the application, so the application is hoping for that env variable to have a value
+          valueFrom:
+            secretRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: USER_PWD
+          valueFrom:
+            secretRef:
+              name: mongo-secret
+              key: mongo-password
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url
 ---
 apiVersion: v1
 kind: Service
